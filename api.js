@@ -1,6 +1,6 @@
 const host = "https://wedev-api.sky.pro/api/v2/todos";
 
-export function getTodos({ token}) {
+export function getTodos({ token }) {
     return fetch(host, {
         method: "GET",
         headers: {
@@ -18,7 +18,7 @@ export function getTodos({ token}) {
 }
 
 export function addTodo({ token, text }) {
-     return fetch(host, {
+    return fetch(host, {
         method: "POST",
         body: JSON.stringify({
             text,
@@ -38,6 +38,19 @@ export function deleteTodo({ id, token }) {
         headers: {
             Authorization: token,
         }
+    })
+        .then((response) => {
+            return response.json();
+        })
+}
+
+export function login({ login, password }) {
+    return fetch("https://wedev-api.sky.pro/api/user/login", {
+        method: "POST",
+        body: JSON.stringify({
+            login,
+            password,
+        })
     })
         .then((response) => {
             return response.json();

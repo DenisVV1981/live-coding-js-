@@ -31,7 +31,7 @@ const renderApp = () => {
             return `
       <li class="task">
         <p class="task-text">
-          ${task.text}
+          ${task.text} (Создал: ${task.user?.name ?? "Неизвестно"})
           <button data-id="${task.id}" class="button delete-button">Удалить</button>
         </p>
       </li>`;
@@ -40,7 +40,7 @@ const renderApp = () => {
 
     const appTemplate = `<h1>Список задач</h1>
 <ul class="tasks" id="list">
-    ${tasksHtml}
+    ${tasksHtml} 
 </ul>
 <br />
 <div class="form">

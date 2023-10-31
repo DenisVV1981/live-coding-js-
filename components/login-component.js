@@ -1,3 +1,5 @@
+import { login } from "../api.js";
+
 export function renderLoginComponent({ appElement, setToken, fetchTodosAndRender}) {
     const appTemplate = `<div class="form">
     <h3 class="form-title">Форма авторизации</h3>
@@ -14,7 +16,14 @@ export function renderLoginComponent({ appElement, setToken, fetchTodosAndRender
 </div>`;
         appElement.innerHTML = appTemplate;
         document.getElementById("login-button").addEventListener("click", () => {
-            setToken("Bearer asb4c4boc86gasb4c4boc86g37w3cc3bo3b83k4g37k3bk3cg3c03ck4k");
-            fetchTodosAndRender();
+            login({
+                login: "admin",
+                password: "admin",
+            }
+            ).then((user) => {
+                setToken(`Bearer ${user.user.token}`);
+                fetchTodosAndRender();
+            })
+            
         })
 }
