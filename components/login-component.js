@@ -1,7 +1,7 @@
-import { loginUser } from "../api.js";
+import { loginUser, registrUser } from "../api.js";
 
 export function renderLoginComponent({ appElement, setToken, fetchTodosAndRender }) {
-    let isLoginMode = false;
+    let isLoginMode = true;
 
     const renderForm = () => {
         const appTemplate = `<div class="form">
@@ -18,7 +18,7 @@ export function renderLoginComponent({ appElement, setToken, fetchTodosAndRender
         <br />
         <br />
         Пароль:
-        <input type="text" id="password-input" class="input" placeholder="Введите пароль"/>
+        <input type="password" id="password-input" class="input" placeholder="Введите пароль"/>
     </div>
     <br />
     <button class="button" id="login-button">${isLoginMode ? 'Войти' : 'Зарегистрироваться'}</button>
@@ -28,26 +28,57 @@ export function renderLoginComponent({ appElement, setToken, fetchTodosAndRender
 </div>`;
         appElement.innerHTML = appTemplate;
         document.getElementById("login-button").addEventListener("click", () => {
-            const login = document.getElementById("login-input").value;
-            const password = document.getElementById("password-input").value;
-            if (!login) {
-                alert("Введите логин...")
-                return;
+            if (isLoginMode) {
+                const login = document.getElementById("login-input").value;
+                const password = document.getElementById("password-input").value;
+                
+                if (!login) {
+                    alert("Введите логин...")
+                    return;
+                }
+                if (!password) {
+                    alert("Введите пароль...")
+                    return;
+                }
+                loginUser({
+                    login: login,
+                    password: password,
+                }
+                ).then((user) => {
+                    setToken(`Bearer ${user.user.token}`);
+                    fetchTodosAndRender();
+                }).catch((error) => {
+                    alert(error.message);;
+                })
+            } else {
+                const name = document.getElementById("name-input").value;
+                const login = document.getElementById("login-input").value;
+                const password = document.getElementById("password-input").value;
+                if (!name) {
+                    alert("Введите имя...")
+                    return;
+                }
+                if (!login) {
+                    alert("Введите логин...")
+                    return;
+                }
+                if (!password) {
+                    alert("Введите пароль...")
+                    return;
+                }
+                registrUser({
+                    login: login,
+                    password: password,
+                    name: name,
+                }
+                ).then((user) => {
+                    setToken(`Bearer ${user.user.token}`);
+                    fetchTodosAndRender();
+                }).catch((error) => {
+                    alert(error.message);
+                })
             }
-            if (!password) {
-                alert("Введите пароль...")
-                return;
-            }
-            loginUser({
-                login: login,
-                password: password,
-            }
-            ).then((user) => {
-                setToken(`Bearer ${user.user.token}`);
-                fetchTodosAndRender();
-            }).catch((error) => {
-                alert("Неверный логин или пароль");
-            })
+
 
         });
         document.getElementById("toggle-button").addEventListener("click", () => {
